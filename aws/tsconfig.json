@@ -19,6 +19,7 @@
         "outDir": "build"
     },
     "include": [
+        "src/index.ts",
         "src/lib/*.ts",
         "src/stacks/**/*.ts"
     ],
