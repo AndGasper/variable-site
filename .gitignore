@@ -1,0 +1,8 @@
+# Ignore node_modules
+**node_modules/
+
+# Ignore build output
+build
+
+# Ignore the cdk.context.json because I don't want to check those values into source control
+cdk.context.json

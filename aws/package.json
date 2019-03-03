@@ -1,0 +1,29 @@
+{
+  "name": "site-with-alb-variable",
+  "version": "1.0.0",
+  "description": "AWS CDK Stack for multi region api with application load balancer.",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "aws-cdk"
+  ],
+  "author": "Andres Gasper",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^3.3.3333",
+    "@types/node": "^11.9.5"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-apigateway": "^0.25.0",
+    "@aws-cdk/aws-cloudfront": "^0.25.0",
+    "@aws-cdk/aws-lambda": "^0.25.0",
+    "@aws-cdk/aws-s3": "^0.25.0",
+    "@aws-cdk/cdk": "^0.25.0",
+    "aws-cdk": "^0.25.0"
+  }
+}
