@@ -19,7 +19,7 @@
         "outDir": "build"
     },
     "include": [
-        "src/libs/*.ts",
+        "src/lib/*.ts",
         "src/stacks/**/*.ts"
     ],
     "exclude": [
