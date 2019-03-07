@@ -21,7 +21,7 @@ export class NamedApi extends cdk.Construct {
         // got eeem of the max limit that you can inline for a lambda function
         const handlerConfig = {
             runtime: lambda.Runtime.NodeJS810,
-            code: lambda.Code.directory('build/lib'),
+            code: lambda.Code.directory('resources/widget.js'),
             handler: 'widgets.main',
             environment: {
                 BUCKET: bucket.bucketName
