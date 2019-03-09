@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { Construct } from '@aws-cdk/cdk';
-import { PolicyStatement } from '@aws-cdk/aws-iam';
+import { PolicyStatement, Policy, AwsManagedPolicy } from '@aws-cdk/aws-iam';
 import { IBucket } from '@aws-cdk/aws-s3';
 
 export interface CloudformationRoleProps {
@@ -9,6 +9,8 @@ export interface CloudformationRoleProps {
 export class CloudformationRole extends Construct {
     constructor(parent: Construct, name: string, props: CloudformationRoleProps) {
         super(parent, name);
+        const policy = new AwsManagedPolicy('sts:assumeRole');
+        
         const s3Policy = this.createS3BucketPolicy();
 
     }

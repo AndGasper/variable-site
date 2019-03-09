@@ -40,6 +40,16 @@ import { CloudFormationRole } from './stacks/constructs/iam/cloudformation-polic
     // });
 // }
 
+
+class CloudFormationRole extends Stack {
+    constructor(parent: App, name: string, props: StackProps) {
+        super(parent, name, props);
+        new CloudFormationRole(this, 'cloudformation-templates-through-cdk', {
+
+        });
+    }
+}
+
 class Api extends Stack {
     constructor(parent: App, name: string, props: StackProps) {
         super(parent, name, props);
@@ -49,8 +59,6 @@ class Api extends Stack {
         });
     }
 }
-
-
 
 class Site extends Stack {
     constructor(parent: App, name: string, props: StackProps) {
