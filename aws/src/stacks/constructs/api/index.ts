@@ -14,14 +14,14 @@ export class NamedApi extends cdk.Construct {
     constructor(parent: cdk.Construct, name: string, props: NamedApiProps) {
         super(parent, name);
 
-        // START LAM`BDA LOGIC
+        // START LAMBDA LOGIC
         // Create S3 bucket for the lambda code
         const bucket = new s3.Bucket(this, 'WidgetStore');
         // Why do I have the feeling I'm about to bump into that
         // got eeem of the max limit that you can inline for a lambda function
         const handlerConfig = {
             runtime: lambda.Runtime.NodeJS810,
-            code: lambda.Code.directory('resources/widget.js'),
+            code: lambda.Code.directory('src/resources'),
             handler: 'widgets.main',
             environment: {
                 BUCKET: bucket.bucketName

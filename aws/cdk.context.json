@@ -1,0 +1,7 @@
+{
+  "ssm:account=985713782822:parameterName=CertificateArn-www.wakemygameup.com:region=us-east-1": "arn:aws:acm:us-east-1:985713782822:certificate/092c0295-caf5-4944-80b2-3263b6b63392",
+  "hosted-zone:account=985713782822:domainName=wakemygameup.com:region=us-east-1": {
+    "Id": "/hostedzone/Z2LN05VHV1XSN1",
+    "Name": "wakemygameup.com."
+  }
+}

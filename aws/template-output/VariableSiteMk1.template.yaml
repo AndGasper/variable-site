@@ -1,0 +1,94 @@
+Resources:
+  StaticSiteSiteBucket1A888BC8:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: www.wakemygameup.com
+      WebsiteConfiguration:
+        ErrorDocument: error.html
+        IndexDocument: index.html
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: VariableSiteMk1/StaticSite/SiteBucket/Resource
+  StaticSiteSiteBucketPolicyD7934718:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket:
+        Ref: StaticSiteSiteBucket1A888BC8
+      PolicyDocument:
+        Statement:
+          - Action: s3:GetObject
+            Effect: Allow
+            Principal: "*"
+            Resource:
+              Fn::Join:
+                - ""
+                - - Fn::GetAtt:
+                      - StaticSiteSiteBucket1A888BC8
+                      - Arn
+                  - /*
+        Version: "2012-10-17"
+    Metadata:
+      aws:cdk:path: VariableSiteMk1/StaticSite/SiteBucket/Policy/Resource
+  StaticSiteSiteDistributionCFDistribution500D676B:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Aliases:
+          - www.wakemygameup.com
+        CacheBehaviors: []
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - GET
+            - HEAD
+          CachedMethods:
+            - GET
+            - HEAD
+          ForwardedValues:
+            Cookies:
+              Forward: none
+            QueryString: false
+          TargetOriginId: origin1
+          ViewerProtocolPolicy: redirect-to-https
+        DefaultRootObject: index.html
+        Enabled: true
+        HttpVersion: http2
+        IPV6Enabled: true
+        Origins:
+          - DomainName:
+              Fn::GetAtt:
+                - StaticSiteSiteBucket1A888BC8
+                - DomainName
+            Id: origin1
+            S3OriginConfig: {}
+        PriceClass: PriceClass_100
+        ViewerCertificate:
+          AcmCertificateArn: arn:aws:acm:us-east-1:985713782822:certificate/092c0295-caf5-4944-80b2-3263b6b63392
+          MinimumProtocolVersion: TLSv1.1_2016
+          SslSupportMethod: sni-only
+    Metadata:
+      aws:cdk:path: VariableSiteMk1/StaticSite/SiteDistribution/CFDistribution
+  StaticSiteSiteAliasRecord5B525E22:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      Name: www.wakemygameup.com.
+      Type: A
+      AliasTarget:
+        DNSName:
+          Fn::GetAtt:
+            - StaticSiteSiteDistributionCFDistribution500D676B
+            - DomainName
+        HostedZoneId: Z2FDTNDATAQYW2
+      HostedZoneId: /hostedzone/Z2LN05VHV1XSN1
+    Metadata:
+      aws:cdk:path: VariableSiteMk1/StaticSite/SiteAliasRecord/Resource
+  CDKMetadata:
+    Type: AWS::CDK::Metadata
+    Properties:
+      Modules: aws-cdk=0.25.0,@aws-cdk/assets=0.25.2,@aws-cdk/aws-apigateway=0.25.0,@aws-cdk/aws-cloudfront=0.25.0,@aws-cdk/aws-cloudwatch=0.25.0,@aws-cdk/aws-codepipeline-api=0.25.2,@aws-cdk/aws-ec2=0.25.0,@aws-cdk/aws-events=0.25.2,@aws-cdk/aws-iam=0.25.2,@aws-cdk/aws-kms=0.25.2,@aws-cdk/aws-lambda=0.25.0,@aws-cdk/aws-route53=0.25.0,@aws-cdk/aws-s3=0.25.2,@aws-cdk/aws-s3-notifications=0.25.2,@aws-cdk/aws-sqs=0.25.0,@aws-cdk/cdk=0.25.0,@aws-cdk/cx-api=0.25.2,jsii-runtime=node.js/v10.15.2
+Outputs:
+  StaticSiteBucket34E5D9AF:
+    Value:
+      Ref: StaticSiteSiteBucket1A888BC8
+  StaticSiteDistributionId8C64EF2A:
+    Value:
+      Ref: StaticSiteSiteDistributionCFDistribution500D676B

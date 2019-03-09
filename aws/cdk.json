@@ -6,5 +6,6 @@
             "websitePrefix": "www",
             "apiPrefix": "api"
         }
-    }
+    },
+    "outdir": "./template-output"
 }

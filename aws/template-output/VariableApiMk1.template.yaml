@@ -1,0 +1,445 @@
+Resources:
+  NamedApiWidgetStore5266C165:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: VariableApiMk1/NamedApi/WidgetStore/Resource
+  NamedApiWidgetHandlerServiceRole875A954D:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: VariableApiMk1/NamedApi/WidgetHandler/ServiceRole/Resource
+  NamedApiWidgetHandlerServiceRoleDefaultPolicy758AA183:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - s3:GetObject*
+              - s3:GetBucket*
+              - s3:List*
+              - s3:DeleteObject*
+              - s3:PutObject*
+              - s3:Abort*
+            Effect: Allow
+            Resource:
+              - Fn::GetAtt:
+                  - NamedApiWidgetStore5266C165
+                  - Arn
+              - Fn::Join:
+                  - ""
+                  - - Fn::GetAtt:
+                        - NamedApiWidgetStore5266C165
+                        - Arn
+                    - /*
+        Version: "2012-10-17"
+      PolicyName: NamedApiWidgetHandlerServiceRoleDefaultPolicy758AA183
+      Roles:
+        - Ref: NamedApiWidgetHandlerServiceRole875A954D
+    Metadata:
+      aws:cdk:path: VariableApiMk1/NamedApi/WidgetHandler/ServiceRole/DefaultPolicy/Resource
+  NamedApiWidgetHandlerF81C1DDE:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Ref: NamedApiWidgetHandlerCodeS3BucketB8C6072D
+        S3Key:
+          Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: NamedApiWidgetHandlerCodeS3VersionKeyE94F3887
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: NamedApiWidgetHandlerCodeS3VersionKeyE94F3887
+      Handler: widgets.main
+      Role:
+        Fn::GetAtt:
+          - NamedApiWidgetHandlerServiceRole875A954D
+          - Arn
+      Runtime: nodejs8.10
+      Environment:
+        Variables:
+          BUCKET:
+            Ref: NamedApiWidgetStore5266C165
+    DependsOn:
+      - NamedApiWidgetHandlerServiceRoleDefaultPolicy758AA183
+      - NamedApiWidgetHandlerServiceRole875A954D
+    Metadata:
+      aws:cdk:path: VariableApiMk1/NamedApi/WidgetHandler/Resource
+      aws:asset:path: C:\Users\Andres\Desktop\Programming\professional\variable-site\aws\src\resources
+      aws:asset:property: Code
+  NamedApiWidgetHandlerApiPermissionGETD964885D:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Ref: NamedApiWidgetHandlerF81C1DDE
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:us-east-1:985713782822:"
+            - Ref: NamedApiwidgetsapiF2A60F63
+            - /
+            - Ref: NamedApiwidgetsapiDeploymentStageprodB91BB64F
+            - /GET/
+    Metadata:
+      aws:cdk:path: VariableApiMk1/NamedApi/WidgetHandler/ApiPermission.GET..
+  NamedApiWidgetHandlerApiPermissionTestGET30B944A4:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Ref: NamedApiWidgetHandlerF81C1DDE
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:us-east-1:985713782822:"
+            - Ref: NamedApiwidgetsapiF2A60F63
+            - /test-invoke-stage/GET/
+    Metadata:
+      aws:cdk:path: VariableApiMk1/NamedApi/WidgetHandler/ApiPermission.Test.GET..
+  NamedApiWidgetHandlerApiPermissionPOSTid50B94699:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Ref: NamedApiWidgetHandlerF81C1DDE
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:us-east-1:985713782822:"
+            - Ref: NamedApiwidgetsapiF2A60F63
+            - /
+            - Ref: NamedApiwidgetsapiDeploymentStageprodB91BB64F
+            - /POST/{id}
+    Metadata:
+      aws:cdk:path: VariableApiMk1/NamedApi/WidgetHandler/ApiPermission.POST..{id}
+  NamedApiWidgetHandlerApiPermissionTestPOSTid040CA39F:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Ref: NamedApiWidgetHandlerF81C1DDE
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:us-east-1:985713782822:"
+            - Ref: NamedApiwidgetsapiF2A60F63
+            - /test-invoke-stage/POST/{id}
+    Metadata:
+      aws:cdk:path: VariableApiMk1/NamedApi/WidgetHandler/ApiPermission.Test.POST..{id}
+  NamedApiWidgetHandlerApiPermissionGETid6956B510:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Ref: NamedApiWidgetHandlerF81C1DDE
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:us-east-1:985713782822:"
+            - Ref: NamedApiwidgetsapiF2A60F63
+            - /
+            - Ref: NamedApiwidgetsapiDeploymentStageprodB91BB64F
+            - /GET/{id}
+    Metadata:
+      aws:cdk:path: VariableApiMk1/NamedApi/WidgetHandler/ApiPermission.GET..{id}
+  NamedApiWidgetHandlerApiPermissionTestGETid5CD2F2BF:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Ref: NamedApiWidgetHandlerF81C1DDE
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:us-east-1:985713782822:"
+            - Ref: NamedApiwidgetsapiF2A60F63
+            - /test-invoke-stage/GET/{id}
+    Metadata:
+      aws:cdk:path: VariableApiMk1/NamedApi/WidgetHandler/ApiPermission.Test.GET..{id}
+  NamedApiWidgetHandlerApiPermissionDELETEid4126607C:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Ref: NamedApiWidgetHandlerF81C1DDE
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:us-east-1:985713782822:"
+            - Ref: NamedApiwidgetsapiF2A60F63
+            - /
+            - Ref: NamedApiwidgetsapiDeploymentStageprodB91BB64F
+            - /DELETE/{id}
+    Metadata:
+      aws:cdk:path: VariableApiMk1/NamedApi/WidgetHandler/ApiPermission.DELETE..{id}
+  NamedApiWidgetHandlerApiPermissionTestDELETEid60C2950A:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Ref: NamedApiWidgetHandlerF81C1DDE
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:us-east-1:985713782822:"
+            - Ref: NamedApiwidgetsapiF2A60F63
+            - /test-invoke-stage/DELETE/{id}
+    Metadata:
+      aws:cdk:path: VariableApiMk1/NamedApi/WidgetHandler/ApiPermission.Test.DELETE..{id}
+  NamedApiwidgetsapiF2A60F63:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Description: This service serves widgets
+      Name: Widget Service
+    Metadata:
+      aws:cdk:path: VariableApiMk1/NamedApi/widgets-api/Resource
+  NamedApiwidgetsapiDeployment234D94E69dfcda262950f71a4d457f10c2d7a929:
+    Type: AWS::ApiGateway::Deployment
+    Properties:
+      RestApiId:
+        Ref: NamedApiwidgetsapiF2A60F63
+      Description: Automatically created by the RestApi construct
+    DependsOn:
+      - NamedApiwidgetsapiidDELETEFE56CE86
+      - NamedApiwidgetsapiidGET938FAF93
+      - NamedApiwidgetsapiidPOSTBA970FC6
+      - NamedApiwidgetsapiidFE8D9B40
+      - NamedApiwidgetsapiGET948C58F4
+    Metadata:
+      aws:cdk:path: VariableApiMk1/NamedApi/widgets-api/Deployment/Resource
+  NamedApiwidgetsapiDeploymentStageprodB91BB64F:
+    Type: AWS::ApiGateway::Stage
+    Properties:
+      RestApiId:
+        Ref: NamedApiwidgetsapiF2A60F63
+      DeploymentId:
+        Ref: NamedApiwidgetsapiDeployment234D94E69dfcda262950f71a4d457f10c2d7a929
+      StageName: prod
+    Metadata:
+      aws:cdk:path: VariableApiMk1/NamedApi/widgets-api/DeploymentStage.prod/Resource
+  NamedApiwidgetsapiCloudWatchRole3DDC513B:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: apigateway.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs
+    Metadata:
+      aws:cdk:path: VariableApiMk1/NamedApi/widgets-api/CloudWatchRole/Resource
+  NamedApiwidgetsapiAccount1226F0ED:
+    Type: AWS::ApiGateway::Account
+    Properties:
+      CloudWatchRoleArn:
+        Fn::GetAtt:
+          - NamedApiwidgetsapiCloudWatchRole3DDC513B
+          - Arn
+    DependsOn:
+      - NamedApiwidgetsapiF2A60F63
+    Metadata:
+      aws:cdk:path: VariableApiMk1/NamedApi/widgets-api/Account
+  NamedApiwidgetsapiGET948C58F4:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: GET
+      ResourceId:
+        Fn::GetAtt:
+          - NamedApiwidgetsapiF2A60F63
+          - RootResourceId
+      RestApiId:
+        Ref: NamedApiwidgetsapiF2A60F63
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        RequestTemplates:
+          application/json: '{ "statusCode": "200" }'
+        Type: AWS_PROXY
+        Uri:
+          Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :apigateway:us-east-1:lambda:path/2015-03-31/functions/
+              - Fn::GetAtt:
+                  - NamedApiWidgetHandlerF81C1DDE
+                  - Arn
+              - /invocations
+    Metadata:
+      aws:cdk:path: VariableApiMk1/NamedApi/widgets-api/Default/GET/Resource
+  NamedApiwidgetsapiidFE8D9B40:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId:
+        Fn::GetAtt:
+          - NamedApiwidgetsapiF2A60F63
+          - RootResourceId
+      PathPart: "{id}"
+      RestApiId:
+        Ref: NamedApiwidgetsapiF2A60F63
+    Metadata:
+      aws:cdk:path: VariableApiMk1/NamedApi/widgets-api/Default/{id}/Resource
+  NamedApiwidgetsapiidPOSTBA970FC6:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: POST
+      ResourceId:
+        Ref: NamedApiwidgetsapiidFE8D9B40
+      RestApiId:
+        Ref: NamedApiwidgetsapiF2A60F63
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri:
+          Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :apigateway:us-east-1:lambda:path/2015-03-31/functions/
+              - Fn::GetAtt:
+                  - NamedApiWidgetHandlerF81C1DDE
+                  - Arn
+              - /invocations
+    Metadata:
+      aws:cdk:path: VariableApiMk1/NamedApi/widgets-api/Default/{id}/POST/Resource
+  NamedApiwidgetsapiidGET938FAF93:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: GET
+      ResourceId:
+        Ref: NamedApiwidgetsapiidFE8D9B40
+      RestApiId:
+        Ref: NamedApiwidgetsapiF2A60F63
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri:
+          Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :apigateway:us-east-1:lambda:path/2015-03-31/functions/
+              - Fn::GetAtt:
+                  - NamedApiWidgetHandlerF81C1DDE
+                  - Arn
+              - /invocations
+    Metadata:
+      aws:cdk:path: VariableApiMk1/NamedApi/widgets-api/Default/{id}/GET/Resource
+  NamedApiwidgetsapiidDELETEFE56CE86:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: DELETE
+      ResourceId:
+        Ref: NamedApiwidgetsapiidFE8D9B40
+      RestApiId:
+        Ref: NamedApiwidgetsapiF2A60F63
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri:
+          Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :apigateway:us-east-1:lambda:path/2015-03-31/functions/
+              - Fn::GetAtt:
+                  - NamedApiWidgetHandlerF81C1DDE
+                  - Arn
+              - /invocations
+    Metadata:
+      aws:cdk:path: VariableApiMk1/NamedApi/widgets-api/Default/{id}/DELETE/Resource
+  NamedApiSiteAliasRecord3FA49CD2:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      Name: api.wakemygameup.com.
+      Type: CNAME
+      HostedZoneId: /hostedzone/Z2LN05VHV1XSN1
+      ResourceRecords:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - ":execute-api:us-east-1:985713782822:"
+              - Ref: NamedApiwidgetsapiF2A60F63
+              - /*/GET/
+      TTL: "1800"
+    Metadata:
+      aws:cdk:path: VariableApiMk1/NamedApi/SiteAliasRecord/Resource
+  CDKMetadata:
+    Type: AWS::CDK::Metadata
+    Properties:
+      Modules: aws-cdk=0.25.0,@aws-cdk/assets=0.25.2,@aws-cdk/aws-apigateway=0.25.0,@aws-cdk/aws-cloudfront=0.25.0,@aws-cdk/aws-cloudwatch=0.25.0,@aws-cdk/aws-codepipeline-api=0.25.2,@aws-cdk/aws-ec2=0.25.0,@aws-cdk/aws-events=0.25.2,@aws-cdk/aws-iam=0.25.2,@aws-cdk/aws-kms=0.25.2,@aws-cdk/aws-lambda=0.25.0,@aws-cdk/aws-route53=0.25.0,@aws-cdk/aws-s3=0.25.2,@aws-cdk/aws-s3-notifications=0.25.2,@aws-cdk/aws-sqs=0.25.0,@aws-cdk/cdk=0.25.0,@aws-cdk/cx-api=0.25.2,jsii-runtime=node.js/v10.15.2
+Parameters:
+  NamedApiWidgetHandlerCodeS3BucketB8C6072D:
+    Type: String
+    Description: S3 bucket for asset "VariableApiMk1/NamedApi/WidgetHandler/Code"
+  NamedApiWidgetHandlerCodeS3VersionKeyE94F3887:
+    Type: String
+    Description: S3 key for asset version "VariableApiMk1/NamedApi/WidgetHandler/Code"
+Outputs:
+  NamedApiwidgetsapiEndpoint69D10BE9:
+    Value:
+      Fn::Join:
+        - ""
+        - - https://
+          - Ref: NamedApiwidgetsapiF2A60F63
+          - .execute-api.us-east-1.
+          - Ref: AWS::URLSuffix
+          - /
+          - Ref: NamedApiwidgetsapiDeploymentStageprodB91BB64F
+          - /

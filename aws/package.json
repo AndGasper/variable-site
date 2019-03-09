@@ -19,8 +19,10 @@
     "@types/node": "^11.9.5"
   },
   "dependencies": {
+    "@aws-cdk/assets": "^0.25.2",
     "@aws-cdk/aws-apigateway": "^0.25.0",
     "@aws-cdk/aws-cloudfront": "^0.25.0",
+    "@aws-cdk/aws-codepipeline": "^0.25.2",
     "@aws-cdk/aws-lambda": "^0.25.0",
     "@aws-cdk/aws-s3": "^0.25.0",
     "@aws-cdk/cdk": "^0.25.0",
