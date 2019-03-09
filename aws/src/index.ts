@@ -2,31 +2,33 @@
 import { Stack, App, StackProps } from '@aws-cdk/cdk';
 import { StaticSite } from './stacks/constructs/static-site';
 import { NamedApi } from './stacks/constructs/api';
+import { CloudFormationRole } from './stacks/constructs/iam/cloudformation-policies';
 
 
-type DeploymentEnvironment = {
-    name: string;
-    region: string[];
-}
 
-type DeploymentEnvironments = DeploymentEnvironment[];
+// type DeploymentEnvironment = {
+//     name: string;
+//     region: string[];
+// }
 
-function getEnvironments(): DeploymentEnvironments {
-    const devCdkEnvironment: DeploymentEnvironment = {
-        name: 'dev',
-        region: ['us-west-2', 'us-east-1']
-    };
-    const stagingCdkEnvironment: DeploymentEnvironment ={
-        name: 'staging',
-        region: ['us-west-2', 'us-east-1']
-    };
-    const prodCdkEnvironment: DeploymentEnvironment ={
-        name: 'prod',
-        region: ['us-west-2', 'us-east-1']
-    };
-    const deploymentEnvironments: DeploymentEnvironments = [devCdkEnvironment, stagingCdkEnvironment, prodCdkEnvironment];
-    return deploymentEnvironments
-}
+// type DeploymentEnvironments = DeploymentEnvironment[];
+
+// function getEnvironments(): DeploymentEnvironments {
+//     const devCdkEnvironment: DeploymentEnvironment = {
+//         name: 'dev',
+//         region: ['us-west-2', 'us-east-1']
+//     };
+//     const stagingCdkEnvironment: DeploymentEnvironment ={
+//         name: 'staging',
+//         region: ['us-west-2', 'us-east-1']
+//     };
+//     const prodCdkEnvironment: DeploymentEnvironment ={
+//         name: 'prod',
+//         region: ['us-west-2', 'us-east-1']
+//     };
+//     const deploymentEnvironments: DeploymentEnvironments = [devCdkEnvironment, stagingCdkEnvironment, prodCdkEnvironment];
+//     return deploymentEnvironments
+// }
 
 // function createStack(deploymentEnvironments): Stack[] {
 //     const stacks = deploymentEnvironments.map(deploymentEnvironment => 

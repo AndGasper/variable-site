@@ -24,6 +24,8 @@
         "src/stacks/**/*.ts"
     ],
     "exclude": [
-        "**node_modules"
+        "**node_modules",
+        "src/stacks/api/",
+        "src/stacks/cdk/",
     ]
 }

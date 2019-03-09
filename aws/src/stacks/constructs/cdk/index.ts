@@ -1,23 +1,29 @@
 #!/usr/bin/env node
-import { Construct, Output, TagManager, Tag } from '@aws-cdk/cdk';
+import { Construct, Output } from '@aws-cdk/cdk';
 import { Bucket, BlockPublicAccess, BucketEncryption } from '@aws-cdk/aws-s3';
 
 
-export class TaggedStack extends Stack {
-    constructor(parent: Construct, name: string, props: TaggedStackProps) {
-        super(parent, name);
+// export interface TaggedStackProps {
+//     id: string;
+//     StackProps: string[];
+// };
 
-    }
+// export class TaggedStack {
+//     constructor(parent: Construct, name: string, props: TaggedStackProps) {
+//         const { id } = TaggedStackProps;
+//     }
+// }
+
+
+export interface CdkEnvironmentBucketProps {
+    bucketName: string;
 }
 
-export default function({ key, stack }) {
-    return
-}
 
-
-class CdkEnvironmentBucket extends Construct {
+export class CdkEnvironmentBucket extends Construct {
     constructor(parent: Construct, name: string, props: CdkEnvironmentBucketProps) {
         super(parent, name);
+        const { bucketName } =  props;
         const cdkBucketAccessControl = new BlockPublicAccess({
             blockPublicAcls: true,
             blockPublicPolicy: true,
@@ -25,6 +31,7 @@ class CdkEnvironmentBucket extends Construct {
             restrictPublicBuckets: true,
         });
         const cdkBucket = new Bucket(this, 'cdkBootstrappedEnvironment', {
+            bucketName: bucketName,
             encryption: BucketEncryption.Kms,
             blockPublicAccess: cdkBucketAccessControl
         });
@@ -33,9 +40,7 @@ class CdkEnvironmentBucket extends Construct {
             value: cdkBucket.bucketArn
         });
         // export the resource to tag it
-        const cdkBucketExport = cdkBucket.export();
+        cdkBucket.export();
 
     }
 }
-
-// const withTagging = injectTagging({ key: })
