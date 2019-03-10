@@ -1,0 +1,6 @@
+# IAM Policy for creating a site
+
+# S3
+# SSM read only 
+# Cloudfront create
+

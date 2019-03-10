@@ -27,5 +27,7 @@
         "**node_modules",
         "src/stacks/api/",
         "src/stacks/cdk/",
+        "./jest.config.js",
+        "*.test.ts"
     ]
 }

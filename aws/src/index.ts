@@ -2,8 +2,6 @@
 import { Stack, App, StackProps } from '@aws-cdk/cdk';
 import { StaticSite } from './stacks/constructs/static-site';
 import { NamedApi } from './stacks/constructs/api';
-import { CloudFormationRole } from './stacks/constructs/iam/cloudformation-policies';
-
 
 
 // type DeploymentEnvironment = {
@@ -40,15 +38,6 @@ import { CloudFormationRole } from './stacks/constructs/iam/cloudformation-polic
     // });
 // }
 
-
-class CloudFormationRole extends Stack {
-    constructor(parent: App, name: string, props: StackProps) {
-        super(parent, name, props);
-        new CloudFormationRole(this, 'cloudformation-templates-through-cdk', {
-
-        });
-    }
-}
 
 class Api extends Stack {
     constructor(parent: App, name: string, props: StackProps) {

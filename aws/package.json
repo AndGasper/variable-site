@@ -7,7 +7,7 @@
     "build": "tsc",
     "watch": "tsc -w",
     "cdk": "cdk",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --watch --config=jest.config.js"
   },
   "keywords": [
     "aws-cdk"
@@ -15,8 +15,15 @@
   "author": "Andres Gasper",
   "license": "ISC",
   "devDependencies": {
-    "typescript": "^3.3.3333",
-    "@types/node": "^11.9.5"
+    "@aws-cdk/assert": "^0.25.2",
+    "@types/jest": "^24.0.11",
+    "@types/node": "^11.9.5",
+    "jest": "^24.3.1",
+    "prettier": "1.16.4",
+    "ts-jest": "^24.0.0",
+    "tslint": "^5.13.1",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.3.3333"
   },
   "dependencies": {
     "@aws-cdk/assets": "^0.25.2",

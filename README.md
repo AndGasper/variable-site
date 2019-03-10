@@ -70,3 +70,37 @@ export class LambdaCodeBucket {
 
     }
 }
+
+
+
+iam
+- cloudformation
+    - CDK Toolkit
+
+- s3
+    - Abort*
+    - DeleteObject
+    - GetBucket*
+    - GetObject*
+    - List*
+    - PutObject*
+- lambda
+    - InvokeFunction
+
+- iam
+    - iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs
+
+cloudwatch
+
+
+```
+class SslCertificateParameterName implements SSMParameterProviderProps {
+            constructor(sslCertificateParameterName: string) {
+                
+            }
+        }
+```
+
+[CSA Consensus Assessments Initiative Questionnaire](https://d1.awsstatic.com/whitepapers/compliance/CSA_Consensus_Assessments_Initiative_Questionnaire.pdf)
+
+[Tagging Strategies](https://aws.amazon.com/answers/account-management/aws-tagging-strategies/)

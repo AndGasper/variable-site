@@ -26,7 +26,7 @@ export class StaticSite extends Construct {
 
         // create s3 bucket
         const s3Bucket = this.createSiteBucket(siteSubDomain, domainName);
-        const s3Output = new Output(this, 'SiteBucket', { 
+        new Output(this, 'SiteBucketName', { 
             value: s3Bucket.bucketName
         });
 
@@ -74,10 +74,11 @@ export class StaticSite extends Construct {
         });
         return distribution;
     }
-    protected createAliasRecord(domainName: string, siteDomain: string, distributionValue: CloudFrontWebDistribution ) {
+    protected createAliasRecord(domainName: string, siteDomain: string, distributionValue: CloudFrontWebDistribution) {
         // Route53 alias record for the CloudFront distribution
+        console.log('this', this);
         const zone = new HostedZoneProvider(this, { domainName: domainName }).findAndImport(this, 'Zone');
-        const aliasRecord = new AliasRecord(this, 'SiteAliasRecord', {
+        new AliasRecord(this, 'SiteAliasRecord', {
             recordName: siteDomain,
             target: distributionValue,
             zone
