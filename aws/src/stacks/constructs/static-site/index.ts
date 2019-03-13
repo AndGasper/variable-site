@@ -2,7 +2,7 @@
 import { CloudFrontWebDistribution, SSLMethod, SecurityPolicyProtocol } from '@aws-cdk/aws-cloudfront';
 import { Bucket } from '@aws-cdk/aws-s3';
 import { Construct, Output, SSMParameterProvider } from '@aws-cdk/cdk';
-import { AliasRecordTargetProps, HostedZoneProvider, AliasRecord } from '@aws-cdk/aws-route53';
+import { HostedZoneProvider, AliasRecord } from '@aws-cdk/aws-route53';
 
 export interface StaticSiteProps {
     domainName: string;
@@ -32,7 +32,7 @@ export class StaticSite extends Construct {
 
         // Create cloudfront distribution
         const cloudFrontDistribution = this.createCloudFrontDistribution(siteDomain, s3Bucket);
-        new Output(this, 'DistributionId', { value: cloudFrontDistribution.dnsName });
+        new Output(this, 'DistributionId', { value: cloudFrontDistribution.distributionId });
         this.createAliasRecord(domainName, siteDomain, cloudFrontDistribution);
     }
     protected createAliasRecord(domainName: string, siteDomain: string, distribution: CloudFrontWebDistribution ) {

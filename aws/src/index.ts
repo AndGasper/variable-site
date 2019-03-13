@@ -62,7 +62,8 @@ class Site extends Stack {
 
 const app = new App();
 
-new Site(app, 'VariableSiteMk1', { env: { region: 'us-east-1' } });
+const siteStackName = 'VariableSiteMk1Record';
+new Site(app, siteStackName, { env: { region: 'us-east-1' } });
 new Api(app, 'VariableApiMk1', { env: { region: 'us-east-1' } });
 
 app.run();
