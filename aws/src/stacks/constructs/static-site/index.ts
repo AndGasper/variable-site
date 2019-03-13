@@ -32,7 +32,7 @@ export class StaticSite extends Construct {
 
         // Create cloudfront distribution
         const cloudFrontDistribution = this.createCloudFrontDistribution(siteDomain, s3Bucket);
-        new Output(this, 'DistributionId', { value: cloudFrontDistribution });
+        new Output(this, 'DistributionId', { value: cloudFrontDistribution.dnsName });
     }
     protected createSiteBucket(siteSubDomain: string, domainName: string): Bucket {
         const siteDomain = siteSubDomain + '.' + domainName;
@@ -42,8 +42,9 @@ export class StaticSite extends Construct {
             bucketName: siteDomain,
             websiteIndexDocument: 'index.html',
             websiteErrorDocument: 'error.html',
-            publicReadAccess: true
         });
+        // make a public site the publicReadAccess was being weird
+        bucket.grantPublicAccess();
         return bucket;
     }
     protected createCloudFrontDistribution(siteDomain: string, siteBucket: Bucket): AliasRecordTargetProps {
@@ -66,6 +67,9 @@ export class StaticSite extends Construct {
                         s3BucketSource: siteBucket
                     },
                     behaviors : [ {isDefaultBehavior: true}],
+                    originHeaders: {
+                        "ayy": "lmao"
+                    }
                 }
             ]
         }); 
