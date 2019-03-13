@@ -53,7 +53,7 @@ class Site extends Stack {
     constructor(parent: App, name: string, props: StackProps) {
         super(parent, name, props); 
         // Associate S3 with the domain name
-        new StaticSite(this, 'StaticSite', {
+        new StaticSite(this, 'StaticSiteName', {
             domainName: this.node.getContext('domain'),
             siteSubDomain: this.node.getContext('subdomain').websitePrefix,
         });

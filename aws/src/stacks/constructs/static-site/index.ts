@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import { CloudFrontWebDistribution, SSLMethod, SecurityPolicyProtocol } from '@aws-cdk/aws-cloudfront';
-import { HostedZoneProvider, AliasRecord } from '@aws-cdk/aws-route53';
 import { Bucket } from '@aws-cdk/aws-s3';
 import { Construct, Output, SSMParameterProvider } from '@aws-cdk/cdk';
+import { AliasRecordTargetProps } from '@aws-cdk/aws-route53';
 
 export interface StaticSiteProps {
     domainName: string;
@@ -33,9 +33,6 @@ export class StaticSite extends Construct {
         // Create cloudfront distribution
         const cloudFrontDistribution = this.createCloudFrontDistribution(siteDomain, s3Bucket);
         new Output(this, 'DistributionId', { value: cloudFrontDistribution });
-
-        // Alias Record for cloudfront distribution
-        this.createAliasRecord(domainName, siteDomain, cloudFrontDistribution);
     }
     protected createSiteBucket(siteSubDomain: string, domainName: string): Bucket {
         const siteDomain = siteSubDomain + '.' + domainName;
@@ -49,14 +46,14 @@ export class StaticSite extends Construct {
         });
         return bucket;
     }
-    protected createCloudFrontDistribution(siteDomain: string, siteBucket: Bucket): CloudFrontWebDistribution {
+    protected createCloudFrontDistribution(siteDomain: string, siteBucket: Bucket): AliasRecordTargetProps {
         // CloudFront distribution that provides HTTPS
         const ssmParameterProviderConfig = {
             parameterName: `CertificateArn-${siteDomain}`
         };
         // Pre-existing ACM certificate, with the ARN stored in an SSM Parameter
         const certificateArn = new SSMParameterProvider(this, ssmParameterProviderConfig).parameterValue();
-        const distribution = new CloudFrontWebDistribution(this, 'SiteDistribution', {
+        const distribution = new CloudFrontWebDistribution(this, 'StaticSiteDistribution', {
             aliasConfiguration: {
                 acmCertRef: certificateArn,
                 names: [ siteDomain ],
@@ -71,18 +68,8 @@ export class StaticSite extends Construct {
                     behaviors : [ {isDefaultBehavior: true}],
                 }
             ]
-        });
-        return distribution;
-    }
-    protected createAliasRecord(domainName: string, siteDomain: string, distributionValue: CloudFrontWebDistribution) {
-        // Route53 alias record for the CloudFront distribution
-        console.log('this', this);
-        const zone = new HostedZoneProvider(this, { domainName: domainName }).findAndImport(this, 'Zone');
-        new AliasRecord(this, 'SiteAliasRecord', {
-            recordName: siteDomain,
-            target: distributionValue,
-            zone
-        });
+        }); 
+        return distribution.asAliasRecordTarget();
     }
 
 }
