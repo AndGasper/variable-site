@@ -2,7 +2,7 @@
 import { CloudFrontWebDistribution, SSLMethod, SecurityPolicyProtocol } from '@aws-cdk/aws-cloudfront';
 import { Bucket } from '@aws-cdk/aws-s3';
 import { Construct, Output, SSMParameterProvider } from '@aws-cdk/cdk';
-import { AliasRecordTargetProps } from '@aws-cdk/aws-route53';
+import { AliasRecordTargetProps, HostedZoneProvider, AliasRecord } from '@aws-cdk/aws-route53';
 
 export interface StaticSiteProps {
     domainName: string;
@@ -33,6 +33,15 @@ export class StaticSite extends Construct {
         // Create cloudfront distribution
         const cloudFrontDistribution = this.createCloudFrontDistribution(siteDomain, s3Bucket);
         new Output(this, 'DistributionId', { value: cloudFrontDistribution.dnsName });
+        this.createAliasRecord(domainName, siteDomain, cloudFrontDistribution);
+    }
+    protected createAliasRecord(domainName: string, siteDomain: string, distribution: CloudFrontWebDistribution ) {
+        const zone = new HostedZoneProvider(this, { domainName: domainName }).findAndImport(this, 'Zone');
+        new AliasRecord(this, 'SiteAliasRecord', {
+            recordName: siteDomain,
+            target: distribution,
+            zone
+        });
     }
     protected createSiteBucket(siteSubDomain: string, domainName: string): Bucket {
         const siteDomain = siteSubDomain + '.' + domainName;
@@ -47,7 +56,7 @@ export class StaticSite extends Construct {
         bucket.grantPublicAccess();
         return bucket;
     }
-    protected createCloudFrontDistribution(siteDomain: string, siteBucket: Bucket): AliasRecordTargetProps {
+    protected createCloudFrontDistribution(siteDomain: string, siteBucket: Bucket): CloudFrontWebDistribution {
         // CloudFront distribution that provides HTTPS
         const ssmParameterProviderConfig = {
             parameterName: `CertificateArn-${siteDomain}`
@@ -68,12 +77,14 @@ export class StaticSite extends Construct {
                     },
                     behaviors : [ {isDefaultBehavior: true}],
                     originHeaders: {
-                        "ayy": "lmao"
+                        "have": "you",
+                        "heard": "the",
+                        "tragedy": "of"
                     }
                 }
             ]
         }); 
-        return distribution.asAliasRecordTarget();
+        return distribution;
     }
 
 }
